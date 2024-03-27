@@ -12,17 +12,20 @@ function my_autoloader($class)
 
 spl_autoload_register('my_autoloader');
 
-$importApp = new App();
+$eventApp = new App();
 
 if(isset($_GET['statistics_mean'])){
-    $importApp->statistics_mean = intval($_GET['statistics_mean']);
+    $eventApp->statistics_mean = intval($_GET['statistics_mean']);
 }
 if(isset($_GET['max_days'])){
-    $importApp->max_days = intval($_GET['max_days']);
+    $eventApp->max_days = intval($_GET['max_days']);
+}
+if(isset($_GET['hardcode_prob'])){
+    $eventApp->hardcode_prob = floatval($_GET['hardcode_prob']);
 }
 
 try {
-    $results = $importApp->startEmulation();
+    $results = $eventApp->startEmulation();
 } catch (Exception $e) {
     die($e->getMessage());
 }

@@ -4,6 +4,7 @@ class App
 
     public $statistics_mean = 200; // ожидаем игроков всего, от и до (или из статистики)
     public $max_days = 7; // дней всего длится
+    public $hardcode_prob = null; // дней всего длится
 
 
     /**
@@ -40,7 +41,7 @@ class App
             }
 
             // вероятность
-            $STAT[$_day]['probability'] = 1/$STAT[$_day]['expecting'];
+            $STAT[$_day]['probability'] = $this->hardcode_prob?:1/$STAT[$_day]['expecting'];
 
 
             // // игроки пошли, пока не кончится день
@@ -57,8 +58,11 @@ class App
                     // проверяем победитель ли с учетом вероятности на сегодня
                     // просто 1/N равно вероятность по сути, чтобы можно было через
                     // через переменную на результат влиять
-                    $this_is_winner = 1/rand(1,$STAT[$_day]['expecting']) == $STAT[$_day]['probability'];
-
+                    if(!$this->hardcode_prob) {
+                        $this_is_winner = 1 / rand(1, $STAT[$_day]['expecting']) == $STAT[$_day]['probability'];
+                    }else{
+                        $this_is_winner = rand(1,100) <= $this->hardcode_prob*100;
+                    }
                     if ($this_is_winner) {
                         $STAT[$_day]['winner'] = $_winner = $_num;
                     }
